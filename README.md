@@ -13,8 +13,8 @@ This app manages an inventory database.
 
 ### ✨ Enhanced Features
 
-1. **Swipe to Delete (`Dismissible`)**
-   - You can easily delete an item by swiping its row horizontally from right to left. It includes a red background delete indicator for better user experience.
+1. **Swipe to Delete with 3-Second Undo (`Dismissible`)**
+   - You can easily delete an item by swiping its row horizontally from right to left. It includes a red background delete indicator. Deleting an item triggers a `SnackBar` with a 3-second countdown to **UNDO** the action, ensuring you can quickly recover accidentally deleted items!
    
 2. **Real-time Total Inventory Value Summary**
    - At the top of the item list, a highlighted summary card continuously updates to show the total value of your inventory (the sum of `quantity * price` across all items) reacting immediately to database changes.

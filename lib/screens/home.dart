@@ -195,10 +195,25 @@ class _HomePageState extends State<HomePage> {
                       ),
                       onDismissed: (direction) {
                         _service.deleteItem(item.id!);
+                        ScaffoldMessenger.of(context).clearSnackBars();
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('${item.name} deleted'),
                             behavior: SnackBarBehavior.floating,
+                            duration: const Duration(seconds: 3),
+                            action: SnackBarAction(
+                              label: 'UNDO',
+                              textColor: Theme.of(context).colorScheme.inversePrimary,
+                              onPressed: () {
+                                _service.restoreItem(item);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Item restored'),
+                                    behavior: SnackBarBehavior.floating,
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         );
                       },

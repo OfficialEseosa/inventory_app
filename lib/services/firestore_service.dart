@@ -13,6 +13,17 @@ class FirestoreService {
     }
   }
 
+  Future<void> restoreItem(Item item) async {
+    try {
+      // Re-adds the item with its original ID if undo is clicked
+      if (item.id != null) {
+        await firestore.collection(collection).doc(item.id).set(item.toMap());
+      }
+    } catch (e) {
+      print("Failed to restore item: $e");
+    }
+  }
+
   Stream<List<Item>> getItems() {
     return firestore.collection(collection).snapshots().map((snapshot) {
       return snapshot.docs
