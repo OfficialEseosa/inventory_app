@@ -1,16 +1,23 @@
-# inventory_app
+# Inventory App
 
-A new Flutter project.
+A Flutter project demonstrating CRUD operations using Firebase Cloud Firestore.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This app manages an inventory database. 
 
-A few resources to get you started if this is your first Flutter project:
+### Features Implemented:
+- View all items from Firestore in real-time (`StreamBuilder` + `ListView.builder`).
+- Add and Edit items using a Bottom Sheet form.
+- Form validation to prevent empty, negative, or invalid numeric data.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### ✨ Enhanced Features
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. **Swipe to Delete (`Dismissible`)**
+   - You can easily delete an item by swiping its row horizontally from right to left. It includes a red background delete indicator for better user experience.
+   
+2. **Real-time Total Inventory Value Summary**
+   - At the top of the item list, a highlighted summary card continuously updates to show the total value of your inventory (the sum of `quantity * price` across all items) reacting immediately to database changes.
+
+3. **Auto-Seed Database Tool**
+   - The AppBar includes a "Magic Wand" icon button. When tapped, it runs a command to auto-populate the Firestore database with 5 random items (with and without descriptions) to quickly test the app layout and features.
