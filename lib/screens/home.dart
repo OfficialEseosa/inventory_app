@@ -62,7 +62,24 @@ class _HomePageState extends State<HomePage> {
           final items = snapshot.data ?? [];
 
           if (items.isEmpty) {
-            return const Center(child: Text('No items found. Tap + to add.'));
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.inventory_2_outlined, size: 80, color: Colors.grey.shade400),
+                  const SizedBox(height: 16),
+                  Text(
+                    'No items found.',
+                    style: TextStyle(color: Colors.grey.shade600, fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Tap the + icon to add an item.',
+                    style: TextStyle(color: Colors.grey.shade500),
+                  ),
+                ],
+              ),
+            );
           }
 
           // Enhanced Feature 2: Total Inventory Value Calculation
@@ -73,32 +90,91 @@ class _HomePageState extends State<HomePage> {
             children: [
               // Summary Snapshot
               Card(
-                margin: const EdgeInsets.all(16),
-                color: Theme.of(context).colorScheme.primaryContainer,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Total Inventory Value:',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      Text(
-                        '\$${totalValue.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
+                margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                elevation: 4,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    gradient: LinearGradient(
+                      colors: [
+                        Theme.of(context).colorScheme.primaryContainer,
+                        Theme.of(context).colorScheme.tertiaryContainer,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                   ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Inventory Value',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '${items.length} Items Total',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimaryContainer.withValues(alpha: 0.7),
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.4),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            '\$${totalValue.toStringAsFixed(2)}',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimaryContainer,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 22,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 4.0),
+                child: Row(
+                  children: [
+                    Icon(Icons.swipe_left, size: 16, color: Colors.grey.shade500),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Swipe item left to delete',
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                        fontSize: 12,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               // 1. Display Items using ListView.builder
               Expanded(
                 child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
                   itemCount: items.length,
                   itemBuilder: (context, index) {
                     final item = items[index];
@@ -108,27 +184,78 @@ class _HomePageState extends State<HomePage> {
                       key: Key(item.id!),
                       direction: DismissDirection.endToStart,
                       background: Container(
-                        color: Colors.red,
+                        margin: const EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.red.shade400,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                         alignment: Alignment.centerRight,
                         padding: const EdgeInsets.only(right: 20),
-                        child: const Icon(Icons.delete, color: Colors.white),
+                        child: const Icon(Icons.delete_sweep, color: Colors.white, size: 28),
                       ),
                       onDismissed: (direction) {
                         _service.deleteItem(item.id!);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('${item.name} deleted')),
+                          SnackBar(
+                            content: Text('${item.name} deleted'),
+                            behavior: SnackBarBehavior.floating,
+                          ),
                         );
                       },
-                      child: ListTile(
-                        title: Text(item.name),
-                        subtitle: Text(
-                          'Qty: ${item.quantity}  |  Price: \$${item.price.toStringAsFixed(2)}\n'
-                          '${item.description ?? "No description"}',
+                      child: Card(
+                        elevation: 2,
+                        margin: const EdgeInsets.symmetric(vertical: 6),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        isThreeLine: true,
-                        trailing: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () => _showItemForm(item),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          leading: CircleAvatar(
+                            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                            radius: 24,
+                            child: Text(
+                              item.name.substring(0, 1).toUpperCase(),
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          title: Text(
+                            item.name,
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(Icons.inventory_2_outlined, size: 16, color: Colors.grey.shade600),
+                                    const SizedBox(width: 4),
+                                    Text('Qty: ${item.quantity}', style: TextStyle(color: Colors.grey.shade800)),
+                                    const SizedBox(width: 16),
+                                    Icon(Icons.attach_money, size: 16, color: Colors.green.shade600),
+                                    Text(item.price.toStringAsFixed(2), style: TextStyle(color: Colors.green.shade700, fontWeight: FontWeight.w600)),
+                                  ],
+                                ),
+                                if (item.description != null && item.description!.isNotEmpty) ...[
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    item.description!,
+                                    style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey.shade600),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ]
+                              ],
+                            ),
+                          ),
+                          trailing: IconButton(
+                            icon: Icon(Icons.edit_note, color: Theme.of(context).colorScheme.primary),
+                            onPressed: () => _showItemForm(item),
+                          ),
                         ),
                       ),
                     );
