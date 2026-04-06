@@ -18,6 +18,3 @@ This app manages an inventory database.
    
 2. **Real-time Total Inventory Value Summary**
    - At the top of the item list, a highlighted summary card continuously updates to show the total value of your inventory (the sum of `quantity * price` across all items) reacting immediately to database changes.
-
-3. **Auto-Seed Database Tool**
-   - The AppBar includes a "Magic Wand" icon button. When tapped, it runs a command to auto-populate the Firestore database with 5 random items (with and without descriptions) to quickly test the app layout and features.

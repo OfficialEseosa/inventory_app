@@ -12,50 +12,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final FirestoreService _service = FirestoreService();
 
-  // Command to add 5 random items with and without descriptions
-  void _seedData() async {
-    final seedItems = [
-      Item(
-        name: 'Wireless Mouse',
-        quantity: 50,
-        price: 25.99,
-        description: 'Ergonomic 2.4GHz mouse',
-      ),
-      Item(
-        name: 'Mechanical Keyboard',
-        quantity: 20,
-        price: 75.50,
-        description: 'Blue switches, RGB lighting',
-      ),
-      Item(
-        name: 'USB-C Cable',
-        quantity: 150,
-        price: 9.99, // No desc
-      ),
-      Item(
-        name: '4K Monitor',
-        quantity: 12,
-        price: 299.99,
-        description: '27-inch IPS panel',
-      ),
-      Item(
-        name: 'Desk Pad',
-        quantity: 85,
-        price: 15.00, // No desc
-      ),
-    ];
-
-    for (var item in seedItems) {
-      await _service.addItem(item);
-    }
-
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('5 random items added!')),
-      );
-    }
-  }
-
   void _showItemForm([Item? existingItem]) {
     showModalBottomSheet(
       context: context,
@@ -85,11 +41,6 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Inventory App'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.auto_awesome),
-            tooltip: 'Seed Random Data',
-            onPressed: _seedData,
-          ),
           IconButton(
             icon: const Icon(Icons.add),
             tooltip: 'Add item',
